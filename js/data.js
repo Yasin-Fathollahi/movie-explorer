@@ -11,17 +11,19 @@ const options = {
 };
 
 export async function searchMovieByTitle(title, page = 1) {
-  const res = await fetch(
-    `${BASE_URL}search/movie?query=${title}&page=${page}`,
-    options,
-  );
+  const url = new URL('search/movie', BASE_URL);
+  url.searchParams.set('query', title);
+  url.searchParams.set('page', page);
+
+  const res = await fetch(url, {
+    ...options,
+    signal: AbortSignal.timeout(5000),
+  });
 
   if (!res.ok) {
     const error = await res.json();
-
     throw new Error(error.status_message);
   }
 
-  const data = await res.json();
-  return data;
+  return res.json();
 }
