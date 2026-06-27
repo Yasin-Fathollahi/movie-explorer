@@ -24,7 +24,20 @@ function renderSearchResults(results) {
   });
 }
 
-window.addEventListener('load', () => {});
+window.addEventListener('DOMContentLoaded', () => {
+  const hero = document.querySelector('.hero');
+  const backgrounds = [
+    './public/images/bg-0.webp',
+    './public/images/bg-1.webp',
+    './public/images/bg-2.webp',
+    './public/images/bg-3.webp',
+  ];
+
+  const randomImage =
+    backgrounds[Math.floor(Math.random() * backgrounds.length)];
+
+  hero.style.backgroundImage = `url('${randomImage}')`;
+});
 
 searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
