@@ -1,4 +1,4 @@
-import { searchMovieByTitle } from './data.js';
+import { search } from './data.js';
 import { formImageURL } from './util.js';
 import resultCard from './components/resultCard.js';
 import error from './components/error.js';
@@ -78,12 +78,15 @@ searchForm.addEventListener('submit', async (event) => {
   console.log('🚀 ~ eventListeners.js:57 ~ query:', query);
   console.log('🚀 ~ eventListeners.js:58 ~ filters:', filters);
 
-  const { results } = await searchMovieByTitle(query, 1);
+  const { results } = await search(query, filters, 1);
 
   renderSearchResults(query, results);
 });
 
-filterBtn.addEventListener('click', () => {});
+filterBtn.addEventListener('click', (event) => {
+  const filtersDropdown = document.querySelector('.filters-dropdown');
+  filtersDropdown.classList.toggle('active');
+});
 
 toggleFilterBtn.forEach((button) =>
   button.addEventListener('click', (event) => {

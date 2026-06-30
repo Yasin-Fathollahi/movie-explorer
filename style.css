@@ -249,9 +249,18 @@ h1 {
   inset-inline-end: 0;
   width: 110px;
   border-radius: 6px;
-  transform: translateY(105%);
+  transform: translateY(95%);
   background-color: #fff;
   overflow: hidden;
+  opacity: 0;
+  transition:
+    transform 200ms ease-in-out,
+    opacity 200ms ease-in-out;
+}
+
+.filters-dropdown.active {
+  transform: translateY(105%);
+  opacity: 100%;
 }
 
 .toggle-filter-btn {
