@@ -1,12 +1,44 @@
+/* 1. Imports */
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
+/* 2. CSS Variables */
 :root {
-  --color-primary: greenyellow;
-  --color-info: #1c274c;
-  --color-active: #0e63be;
-  --color-muted: #999;
+  /* Brand */
+  --color-primary: #3b82f6; /* #ff4365 */
+  --color-primary-hover: #2563eb;
+  --color-primary-light: #dbeafe;
 
-  --header-height: 4rem;
+  /* Semantic */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #0ea5e9;
+
+  /* Background */
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-surface: #ffffff;
+
+  /* Text */
+  --color-text: #111827;
+  --color-text-secondary: #6b7280;
+  --color-text-muted: #9ca3af;
+  --color-text-inverse: #ffffff;
+
+  /* Border */
+  --color-border: #e5e7eb;
+  --color-border-light: #f3f4f6;
+
+  /* States */
+  --color-hover: rgba(0, 0, 0, 0.05);
+  --color-active: rgba(0, 0, 0, 0.1);
+  --color-disabled: #d1d5db;
+
+  /* Shadows */
+  --color-shadow: rgba(0, 0, 0, 0.15);
+
+  --color-link: #0e63be;
+  --color-link-hover: #004085;
 
   /* Typography */
   --text-xs: 0.75rem; /* 12px*/
@@ -18,12 +50,57 @@
   --font-normal: 400;
   --font-medium: 500;
   --font-semibold: 600;
+
+  /* Heights */
+  --header-height: 4rem;
+  --footer-height: 1rem;
 }
 
-* {
+/* 3. Theme Variables */
+
+/*
+/////////////// Manual Theme Setting: 1. The Class Approach
+<html class="dark">
+.dark {
+  ...
+}
+
+/////////////// Manual Theme Setting: 2. The data-theme Attribute
+<html data-theme="dark">
+[data-theme="dark"] {
+    ...
+}
+  
+///////////// System Preference theme setting is done at the **end of file** next to media queries
+Best way:
+1. set system preference
+2. have a button for user preference in app (manual)
+3. store the preference in localStorage
+
+note: for dark mode we just recreate the CSS variables and change their values.
+*/
+
+/* 4. CSS Reset */
+
+html {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+*:not(dialog) {
+  margin: 0; /* dialog margin: auto; by default to be centered */
+}
+
+/* 3. Enable keyword animations */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
 }
 
 body {
@@ -33,6 +110,31 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+/* 5. Global Utilities */
+.container {
+  padding-inline: 1rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.sr-only {
+  /* To hide an element visually without hiding it from screen readers
+  Styles based on TailwindCSS Library */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* 6. Components  - Doesn't have one yet*/
 
 a {
   text-decoration: none;
@@ -51,24 +153,25 @@ li {
   list-style: none;
 }
 
-.container {
-  padding-inline: 1rem;
-}
-
 main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #555;
+  background-color: red;
 }
 
 /* header */
+header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-block: 1rem;
-  background-color: #333;
   color: #fff;
   height: var(--header-height);
 }
@@ -98,7 +201,8 @@ main {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  height: calc(100svh - var(--header-height));
+  /* height: calc(100svh - var(--footer-height)); */
+  height: 100svh;
 }
 
 .hero-content {
@@ -112,7 +216,7 @@ main {
 h1 {
   font-size: 3rem;
   font-weight: 500;
-  color: var(--color-primary);
+  color: #fff;
 }
 
 .search-guide-text {
@@ -123,6 +227,7 @@ h1 {
 .search-form {
   background-color: white;
   border-radius: 6px;
+  overflow: hidden;
   width: 95%;
   display: flex;
 }
@@ -135,26 +240,33 @@ h1 {
 }
 
 .search-input:focus {
-  outline: 2px solid var(--color-primary);
-  border-radius: 6px;
+  outline: none;
 }
 
-.submit-btn {
-  background-color: var(--color-primary);
-  padding: 0.4rem 0.4rem;
+.filter-btn {
+  padding: 0.8rem 0.8rem;
   border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-text);
+}
+
+.filter-btn svg {
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 .search-example-text {
   font-size: var(--text-sm);
-  color: #999;
+  color: var(--color-text-muted);
   white-space: nowrap;
   width: 95%;
 }
 
 /* Movie results section */
 .search-results {
-  background: white;
+  background: #fff;
   font-size: var(--text-sm);
 }
 
@@ -163,7 +275,7 @@ h1 {
   font-size: var(--text-xl);
 }
 
-.section-heading {
+.results-heading {
   font-weight: var(--font-semibold);
   font-size: var(--text-lg);
 }
@@ -172,6 +284,7 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding: 0;
 }
 
 .result-details {
@@ -185,7 +298,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
   /* width: fit-content; */
-  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.04);
   border-radius: 8px;
 }
 
@@ -201,14 +314,14 @@ h1 {
 }
 
 .result-infos {
-  color: var(--color-muted);
+  color: var(--color-text-muted);
   white-space: nowrap;
   display: flex;
   gap: 4px;
 }
 
 .result-infos svg {
-  fill: var(--color-muted);
+  fill: var(--color-text-muted);
   width: 1rem;
 }
 
@@ -255,14 +368,14 @@ h1 {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: var(--color-active);
+  color: var(--color-link);
 }
 
 .mark-as-read-btn {
-  color: var(--color-active);
   display: flex;
   width: fit-content;
   gap: 4px;
+  color: var(--color-link);
 }
 
 .mark-as-read-btn svg {
@@ -271,8 +384,8 @@ h1 {
 
 .details-btn svg {
   width: 1.5rem;
-  stroke: var(--color-active);
-  fill: var(--color-active);
+  stroke: var(--color-link);
+  fill: var(--color-link);
 }
 
 .details-btn {
@@ -281,6 +394,25 @@ h1 {
 
 /* footer */
 
-.footer-text {
-  text-align: center;
+footer {
+  height: var(--footer-height);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  inset-inline: 0;
+  padding: 1.2rem 0;
+}
+
+/* 7. Animations */
+/* 8. Media Queries */
+
+/* 9. Theme Preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111;
+    --text: white;
+  }
 }

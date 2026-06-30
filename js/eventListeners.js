@@ -1,11 +1,13 @@
 import { searchMovieByTitle } from './data.js';
 import { formImageURL } from './util.js';
 import resultCard from './components/resultCard.js';
-const searchResultsList = document.querySelector('.results-list');
+import error from './components/error.js';
 const searchForm = document.querySelector('.search-form');
+const resultsSection = document.querySelector('.search-results');
+const searchResultsList = document.querySelector('.results-list');
+const footer = document.querySelector('footer');
 
 function renderSearchResults(results) {
-  searchResultsList.textContent = '';
   results.forEach((result) => {
     const poster = formImageURL(result.poster_path, 'poster', 'mobile');
     const year = new Date(result.release_date).getFullYear();
@@ -24,6 +26,11 @@ function renderSearchResults(results) {
   });
 }
 
+function renderError(targetContainer, message) {
+  // Not working yet
+  targetContainer.insertAdjacentHTML('afterbegin', error(message));
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   const hero = document.querySelector('.hero');
   const backgrounds = [
@@ -40,15 +47,30 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 searchForm.addEventListener('submit', async (event) => {
+  const h2 = document.querySelector('h2');
+  const resultsHeading = document.querySelector('.results-heading');
   event.preventDefault();
   const formData = new FormData(searchForm);
   const movieName = Object.fromEntries(formData.entries())['movie-name'];
   const { results } = await searchMovieByTitle(movieName, 1);
 
-  const searchTitle = (document.querySelector('.search-title').textContent =
-    movieName);
+  resultsSection.classList.remove('hidden');
+  footer.style.position = 'static';
+  footer.style.color = '#000';
+  searchResultsList.textContent = '';
 
-  console.log(results);
+  if (results.length === 0) {
+    resultsHeading.classList.add('hidden');
+    h2.textContent = 'No results found!';
+    return;
+  }
+
+  if (h2.textContent === 'No results found!') {
+    h2.innerHTML = 'Search results for "<span class="search-title"></span>"';
+  }
+
+  resultsHeading.classList.remove('hidden');
+  document.querySelector('.search-title').textContent = movieName;
 
   renderSearchResults(results);
 });

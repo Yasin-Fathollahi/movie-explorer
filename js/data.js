@@ -2,6 +2,18 @@ const API_READ_ACCESS_KEY =
   'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzNzgyZGIyNzQzNDY4NWQ1MmZlNTVhYWNhZWVmNDI0ZSIsIm5iZiI6MTc4MjIzMjc1OC44MTc5OTk4LCJzdWIiOiI2YTNhYjZiNmY0NDZhOTBjODkwMTczMmEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.UD0U7d9fKskM7LT2U_SwPqOkxvJYTCw973-OxIAh3ro';
 const BASE_URL = 'https://api.themoviedb.org/3/';
 
+/*
+
+search/multi  // GET
+Use multi search when you want to search for movies, TV shows and people in a single request.
+
+search/tv // GET
+Search for TV shows by their original, translated and also known as names.
+
+https://api.themoviedb.org/3/trending/person/{time_window} // GET
+Get the trending people on TMDB.
+*/
+
 const options = {
   method: 'GET',
   headers: {
