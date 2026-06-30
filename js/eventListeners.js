@@ -9,7 +9,28 @@ const footer = document.querySelector('footer');
 const filterBtn = document.querySelector('.filter-btn');
 const toggleFilterBtn = document.querySelectorAll('.toggle-filter-btn');
 
-function renderSearchResults(results) {
+function renderSearchResults(query, results) {
+  const h2 = document.querySelector('h2');
+  const resultsHeading = document.querySelector('.results-heading');
+
+  resultsSection.classList.remove('hidden');
+  footer.style.position = 'static';
+  footer.style.color = '#000';
+  searchResultsList.textContent = '';
+
+  if (results.length === 0) {
+    resultsHeading.classList.add('hidden');
+    h2.textContent = 'No results found!';
+    return;
+  }
+
+  if (h2.textContent === 'No results found!') {
+    h2.innerHTML = 'Search results for "<span class="search-title"></span>"';
+  }
+
+  resultsHeading.classList.remove('hidden');
+  document.querySelector('.search-title').textContent = query;
+
   results.forEach((result) => {
     const poster = formImageURL(result.poster_path, 'poster', 'mobile');
     const year = new Date(result.release_date).getFullYear();
@@ -49,8 +70,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 searchForm.addEventListener('submit', async (event) => {
-  const h2 = document.querySelector('h2');
-  const resultsHeading = document.querySelector('.results-heading');
   event.preventDefault();
   const formData = new FormData(searchForm);
   const query = formData.get('query');
@@ -61,25 +80,7 @@ searchForm.addEventListener('submit', async (event) => {
 
   const { results } = await searchMovieByTitle(query, 1);
 
-  resultsSection.classList.remove('hidden');
-  footer.style.position = 'static';
-  footer.style.color = '#000';
-  searchResultsList.textContent = '';
-
-  if (results.length === 0) {
-    resultsHeading.classList.add('hidden');
-    h2.textContent = 'No results found!';
-    return;
-  }
-
-  if (h2.textContent === 'No results found!') {
-    h2.innerHTML = 'Search results for "<span class="search-title"></span>"';
-  }
-
-  resultsHeading.classList.remove('hidden');
-  document.querySelector('.search-title').textContent = query;
-
-  renderSearchResults(results);
+  renderSearchResults(query, results);
 });
 
 filterBtn.addEventListener('click', () => {});
