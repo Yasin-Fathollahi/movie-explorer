@@ -128,7 +128,6 @@ body {
   height: 1px;
   padding: 0;
   margin: -1px;
-  overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
   border-width: 0;
@@ -227,9 +226,9 @@ h1 {
 .search-form {
   background-color: white;
   border-radius: 6px;
-  overflow: hidden;
   width: 95%;
   display: flex;
+  position: relative;
 }
 
 .search-input {
@@ -237,10 +236,42 @@ h1 {
   background: none;
   flex: 1;
   padding: 0.2rem 0.4rem 0.2rem;
+  border-radius: 6px;
 }
 
 .search-input:focus {
   outline: none;
+}
+
+.filters-dropdown {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  width: 110px;
+  border-radius: 6px;
+  transform: translateY(105%);
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.toggle-filter-btn {
+  width: 100%;
+  transition: all 100ms ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  white-space: nowrap;
+  font-size: var(--text-sm);
+}
+
+.toggle-filter-btn svg {
+  color: var(--color-primary);
+  width: 1.4rem;
+  visibility: hidden;
+}
+
+.toggle-filter-btn.active svg {
+  visibility: visible;
 }
 
 .filter-btn {

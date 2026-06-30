@@ -6,6 +6,8 @@ const searchForm = document.querySelector('.search-form');
 const resultsSection = document.querySelector('.search-results');
 const searchResultsList = document.querySelector('.results-list');
 const footer = document.querySelector('footer');
+const filterBtn = document.querySelector('.filter-btn');
+const toggleFilterBtn = document.querySelectorAll('.toggle-filter-btn');
 
 function renderSearchResults(results) {
   results.forEach((result) => {
@@ -51,8 +53,13 @@ searchForm.addEventListener('submit', async (event) => {
   const resultsHeading = document.querySelector('.results-heading');
   event.preventDefault();
   const formData = new FormData(searchForm);
-  const movieName = Object.fromEntries(formData.entries())['movie-name'];
-  const { results } = await searchMovieByTitle(movieName, 1);
+  const query = formData.get('query');
+  const filters = formData.getAll('filters');
+
+  console.log('🚀 ~ eventListeners.js:57 ~ query:', query);
+  console.log('🚀 ~ eventListeners.js:58 ~ filters:', filters);
+
+  const { results } = await searchMovieByTitle(query, 1);
 
   resultsSection.classList.remove('hidden');
   footer.style.position = 'static';
@@ -70,7 +77,19 @@ searchForm.addEventListener('submit', async (event) => {
   }
 
   resultsHeading.classList.remove('hidden');
-  document.querySelector('.search-title').textContent = movieName;
+  document.querySelector('.search-title').textContent = query;
 
   renderSearchResults(results);
 });
+
+filterBtn.addEventListener('click', () => {});
+
+toggleFilterBtn.forEach((button) =>
+  button.addEventListener('click', (event) => {
+    const btn = event.currentTarget;
+    const checkbox = btn.querySelector('input');
+
+    btn.classList.toggle('active');
+    checkbox.toggleAttribute('checked');
+  }),
+);

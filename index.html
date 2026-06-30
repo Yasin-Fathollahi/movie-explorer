@@ -37,18 +37,95 @@
         <div class="hero-content container">
           <h1>Movie Explorer</h1>
           <p class="search-guide-text">
-            Search for your favorite movies by title...
+            Search for your favorite movies, TV shows and people...
           </p>
           <form class="search-form">
             <input
               type="search"
-              name="movie-name"
+              name="query"
               class="search-input"
-              placeholder="Search movie"
+              placeholder="Search movie, TV show, people"
               id="movie-search"
-              aria-label="Search movie"
+              aria-label="Search movie, TV show, people"
               required
             />
+            <div class="filters-dropdown">
+              <button type="button" class="toggle-filter-btn">
+                Movies
+                <input type="checkbox" name="filters" value="movies" hidden />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      d="M4 12.6111L8.92308 17.5L20 6.5"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </g>
+                </svg>
+              </button>
+              <button type="button" class="toggle-filter-btn">
+                TV Shows
+                <input type="checkbox" name="filters" value="tv" hidden />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      d="M4 12.6111L8.92308 17.5L20 6.5"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </g>
+                </svg>
+              </button>
+              <button type="button" class="toggle-filter-btn">
+                People
+                <input type="checkbox" name="filters" value="people" hidden />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g
+                    id="SVGRepo_tracerCarrier"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  ></g>
+                  <g id="SVGRepo_iconCarrier">
+                    <path
+                      d="M4 12.6111L8.92308 17.5L20 6.5"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </g>
+                </svg>
+              </button>
+            </div>
             <button type="button" class="filter-btn">
               <svg
                 viewBox="0 0 24 24"
