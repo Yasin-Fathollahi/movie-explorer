@@ -2,12 +2,31 @@ import { search } from './data.js';
 import { formImageURL } from './util.js';
 import resultCard from './components/resultCard.js';
 import error from './components/error.js';
+import renderPerson from './views/renderPersonCard.js';
+import renderMovieOrTV from './views/renderMovieOrTvCard.js';
 const searchForm = document.querySelector('.search-form');
 const resultsSection = document.querySelector('.search-results');
 const searchResultsList = document.querySelector('.results-list');
 const footer = document.querySelector('footer');
 const filterBtn = document.querySelector('.filter-btn');
 const toggleFilterBtn = document.querySelectorAll('.toggle-filter-btn');
+
+function determineResultType(result) {
+  if (result.media_type) {
+    return result.media_type;
+  }
+  if (result.release_date) {
+    return 'movie';
+  }
+
+  if (result.first_air_date) {
+    return 'tv';
+  }
+
+  if (result.gender) {
+    return 'person';
+  }
+}
 
 function renderSearchResults(query, results) {
   const h2 = document.querySelector('h2');
@@ -32,20 +51,15 @@ function renderSearchResults(query, results) {
   document.querySelector('.search-title').textContent = query;
 
   results.forEach((result) => {
-    const poster = formImageURL(result.poster_path, 'poster', 'mobile');
-    const year = new Date(result.release_date).getFullYear();
+    const type = determineResultType(result);
 
-    // TODO: also try the new Temporal API
+    if (type === 'movie' || type === 'tv') {
+      renderMovieOrTV(result, type);
+    }
 
-    const movie = {
-      title: result.title,
-      poster,
-      year,
-      voteAverage: result.vote_average,
-      voteCount: result.vote_count,
-    };
-
-    searchResultsList.insertAdjacentHTML('beforeend', resultCard(movie));
+    if (type === 'person') {
+      renderPerson(result);
+    }
   });
 }
 
@@ -74,12 +88,8 @@ searchForm.addEventListener('submit', async (event) => {
   const formData = new FormData(searchForm);
   const query = formData.get('query');
   const filters = formData.getAll('filters');
-
-  console.log('🚀 ~ eventListeners.js:57 ~ query:', query);
-  console.log('🚀 ~ eventListeners.js:58 ~ filters:', filters);
-
   const { results } = await search(query, filters, 1);
-
+  console.log(results);
   renderSearchResults(query, results);
 });
 
