@@ -4,7 +4,7 @@ export function formImageURL(image, imageType, device) {
   const encodedImage = encodeURIComponent(image);
 
   if (imageType === 'poster' && device === 'mobile') {
-    url = new URL(`w500/${encodedImage}`, BASE_IMAGE_URL);
+    url = new URL(`w154/${encodedImage}`, BASE_IMAGE_URL);
   }
 
   return url;
