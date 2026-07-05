@@ -22,8 +22,18 @@ const options = {
   },
 };
 
-export async function searchMovieByTitle(title, page = 1) {
-  const url = new URL('search/movie', BASE_URL);
+function filterResults(results, includedTypes) {
+  return results.filter((res) => includedTypes.includes(res.media_type));
+}
+
+export async function search(
+  title,
+  filters = ['movie', 'tv', 'person'],
+  page = 1,
+) {
+  const route = filters.length > 1 ? 'search/multi' : `search/${filters[0]}`;
+
+  const url = new URL(route, BASE_URL);
   url.searchParams.set('query', title);
   url.searchParams.set('page', page);
 
@@ -34,8 +44,27 @@ export async function searchMovieByTitle(title, page = 1) {
 
   if (!res.ok) {
     const error = await res.json();
-    throw new Error(error.status_message);
+    throw new Error(error.status_message || 'Something went wrong!');
   }
 
-  return res.json();
+  const data = await res.json();
+  const reformattedData = {
+    page: page,
+    results: data.results,
+    totalResults: data.totalResults,
+    totalPages: data.total_pages,
+  };
+
+  if (route === 'search/multi' && filters.length < 3) {
+    const filteredResults = filterResults(reformattedData.results, filters);
+    const RESULTS_PER_PAGE = 20;
+    return {
+      page,
+      results: filteredResults,
+      totalResults: filteredResults.length,
+      totalPages: filteredResults.length / RESULTS_PER_PAGE,
+    };
+  }
+
+  return data;
 }
