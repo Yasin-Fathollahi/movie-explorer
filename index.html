@@ -50,9 +50,15 @@
               required
             />
             <div class="filters-dropdown">
-              <button type="button" class="toggle-filter-btn">
+              <button type="button" class="toggle-filter-btn active">
                 Movies
-                <input type="checkbox" name="filters" value="movie" hidden />
+                <input
+                  type="checkbox"
+                  name="filters"
+                  value="movie"
+                  hidden
+                  checked
+                />
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -75,9 +81,15 @@
                   </g>
                 </svg>
               </button>
-              <button type="button" class="toggle-filter-btn">
+              <button type="button" class="toggle-filter-btn active">
                 TV Shows
-                <input type="checkbox" name="filters" value="tv" hidden />
+                <input
+                  type="checkbox"
+                  name="filters"
+                  value="tv"
+                  hidden
+                  checked
+                />
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -100,9 +112,15 @@
                   </g>
                 </svg>
               </button>
-              <button type="button" class="toggle-filter-btn">
+              <button type="button" class="toggle-filter-btn active">
                 People
-                <input type="checkbox" name="filters" value="person" hidden />
+                <input
+                  type="checkbox"
+                  name="filters"
+                  value="person"
+                  hidden
+                  checked
+                />
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -156,7 +174,6 @@
         </div>
       </section>
       <section class="search-results container hidden">
-        <!-- movie cards -->
         <h2>Search results for "<span class="search-title"></span>"</h2>
         <h3 class="results-heading">Titles</h3>
         <ul class="results-list">
