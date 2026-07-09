@@ -26,15 +26,15 @@ function filterResults(results, includedTypes) {
   return results.filter((res) => includedTypes.includes(res.media_type));
 }
 
-export async function search(
-  title,
-  filters = ['movie', 'tv', 'person'],
-  page = 1,
-) {
+export async function search(page = 1) {
+  const params = new URLSearchParams(location.search);
+  const query = params.get('query');
+  const filters = params.getAll('filter');
+
   const route = filters.length > 1 ? 'search/multi' : `search/${filters[0]}`;
 
   const url = new URL(route, BASE_URL);
-  url.searchParams.set('query', title);
+  url.searchParams.set('query', query);
   url.searchParams.set('page', page);
 
   const res = await fetch(url, {
@@ -48,10 +48,12 @@ export async function search(
   }
 
   const data = await res.json();
+
   const reformattedData = {
+    query,
     page: page,
     results: data.results,
-    totalResults: data.totalResults,
+    totalResults: data.total_results,
     totalPages: data.total_pages,
   };
 
@@ -59,6 +61,7 @@ export async function search(
     const filteredResults = filterResults(reformattedData.results, filters);
     const RESULTS_PER_PAGE = 20;
     return {
+      query,
       page,
       results: filteredResults,
       totalResults: filteredResults.length,
@@ -66,5 +69,5 @@ export async function search(
     };
   }
 
-  return data;
+  return reformattedData;
 }

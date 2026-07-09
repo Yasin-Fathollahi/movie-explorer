@@ -28,7 +28,7 @@ function determineResultType(result) {
   }
 }
 
-function renderSearchResults(query, results) {
+function renderSearchResults(query = 'test movie', results) {
   const h2 = document.querySelector('h2');
   const resultsHeading = document.querySelector('.results-heading');
 
@@ -83,13 +83,8 @@ function setRandomBG() {
   hero.style.backgroundImage = `url('${randomImage}')`;
 }
 
-async function handleSearch(event) {
-  event.preventDefault();
-  const formData = new FormData(searchForm);
-  const query = formData.get('query');
-  const filters = formData.getAll('filters');
-  const { results } = await search(query, filters, 1);
-  console.log(results);
+async function handleSearch() {
+  const { query, results } = await search(1);
   renderSearchResults(query, results);
 }
 
@@ -108,9 +103,10 @@ function toggleFilter(event) {
 
 window.addEventListener('DOMContentLoaded', () => {
   if (location.pathname === '/') return setRandomBG();
+  if (location.pathname === '/search.html') return handleSearch();
 });
 
-searchForm && searchForm.addEventListener('submit', handleSearch);
+// searchForm && searchForm.addEventListener('submit', handleSearchSubmit);
 
 filterBtn && filterBtn.addEventListener('click', toggleFilterList);
 
