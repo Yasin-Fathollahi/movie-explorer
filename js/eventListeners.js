@@ -83,8 +83,43 @@ function setRandomBG() {
   hero.style.backgroundImage = `url('${randomImage}')`;
 }
 
+function createUpdatedURL(query, filters) {
+  const url = new URL(window.location);
+  url.search = '';
+  url.searchParams.set('query', query);
+  filters.forEach((filter) => url.searchParams.append('filter', filter));
+  return url;
+}
+
 async function handleSearch() {
-  const { query, results } = await search(1);
+  try {
+    document.querySelector('.search-input').value = '';
+    const { query, results } = await search(1);
+    renderSearchResults(query, results);
+  } catch (err) {
+    console.error(err);
+    window.location.replace('/');
+  }
+}
+
+async function handleSearchSubmit(event) {
+  event.preventDefault();
+  const formData = new FormData(searchForm);
+  const query = formData.get('query');
+  const filters = formData.getAll('filter');
+
+  const updatedURL = createUpdatedURL(query, filters);
+  const isSameSearch = location.search === updatedURL.search;
+
+  if (isSameSearch) {
+    // prevent redundant pushState and api call
+    return;
+  }
+
+  // change the url without reload
+  history.pushState({}, '', updatedURL);
+
+  const { results } = await search(1);
   renderSearchResults(query, results);
 }
 
@@ -106,7 +141,11 @@ window.addEventListener('DOMContentLoaded', () => {
   if (location.pathname === '/search.html') return handleSearch();
 });
 
-// searchForm && searchForm.addEventListener('submit', handleSearchSubmit);
+location.pathname === '/search.html' &&
+  searchForm.addEventListener('submit', handleSearchSubmit);
+
+// event.state => a copy of the state
+window.addEventListener('popstate', handleSearch);
 
 filterBtn && filterBtn.addEventListener('click', toggleFilterList);
 
