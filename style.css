@@ -109,6 +109,7 @@ body {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
+  background: #fafafa;
 }
 
 /* 5. Global Utilities */
@@ -158,11 +159,16 @@ main {
   flex-direction: column;
 }
 
+.search main {
+  margin-block-start: var(--header-height);
+}
+
 /* header */
 header {
   position: fixed;
   inset-block-start: 0;
   inset-inline: 0;
+  z-index: 100;
 }
 
 .navbar {
@@ -172,6 +178,11 @@ header {
   padding-block: 1rem;
   color: #fff;
   height: var(--header-height);
+}
+
+.search .navbar {
+  color: var(--color-text);
+  backdrop-filter: blur(10px);
 }
 
 .logo {
@@ -229,6 +240,15 @@ h1 {
   display: flex;
   position: relative;
 }
+
+.search .search-form {
+  margin-inline: auto;
+  width: 500px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+}
+
+/* .search .search-form:has(.search-input:focus) {
+} */
 
 .search-input {
   border: none;
@@ -305,7 +325,6 @@ h1 {
 
 /* Movie results section */
 .search-results {
-  background: #fafafa;
   font-size: var(--text-sm);
 }
 
