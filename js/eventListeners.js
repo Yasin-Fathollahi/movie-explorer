@@ -68,7 +68,7 @@ function renderError(targetContainer, message) {
   targetContainer.insertAdjacentHTML('afterbegin', error(message));
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+function setRandomBG() {
   const hero = document.querySelector('.hero');
   const backgrounds = [
     './public/images/bg-0.webp',
@@ -81,9 +81,9 @@ window.addEventListener('DOMContentLoaded', () => {
     backgrounds[Math.floor(Math.random() * backgrounds.length)];
 
   hero.style.backgroundImage = `url('${randomImage}')`;
-});
+}
 
-searchForm.addEventListener('submit', async (event) => {
+async function handleSearch(event) {
   event.preventDefault();
   const formData = new FormData(searchForm);
   const query = formData.get('query');
@@ -91,19 +91,29 @@ searchForm.addEventListener('submit', async (event) => {
   const { results } = await search(query, filters, 1);
   console.log(results);
   renderSearchResults(query, results);
-});
+}
 
-filterBtn.addEventListener('click', (event) => {
+function toggleFilterList() {
   const filtersDropdown = document.querySelector('.filters-dropdown');
   filtersDropdown.classList.toggle('active');
+}
+
+function toggleFilter(event) {
+  const btn = event.currentTarget;
+  const checkbox = btn.querySelector('input');
+
+  btn.classList.toggle('active');
+  checkbox.toggleAttribute('checked');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (location.pathname === '/') return setRandomBG();
 });
 
-toggleFilterBtn.forEach((button) =>
-  button.addEventListener('click', (event) => {
-    const btn = event.currentTarget;
-    const checkbox = btn.querySelector('input');
+searchForm && searchForm.addEventListener('submit', handleSearch);
 
-    btn.classList.toggle('active');
-    checkbox.toggleAttribute('checked');
-  }),
+filterBtn && filterBtn.addEventListener('click', toggleFilterList);
+
+toggleFilterBtn.forEach((button) =>
+  button.addEventListener('click', toggleFilter),
 );
