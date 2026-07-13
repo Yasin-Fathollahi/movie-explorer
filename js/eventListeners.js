@@ -4,12 +4,7 @@ import resultCard from './components/resultCard.js';
 import error from './components/error.js';
 import renderPerson from './views/renderPersonCard.js';
 import renderMovieOrTV from './views/renderMovieOrTvCard.js';
-const searchForm = document.querySelector('.search-form');
-const resultsSection = document.querySelector('.search-results');
-const searchResultsList = document.querySelector('.results-list');
-const footer = document.querySelector('footer');
-const filterBtn = document.querySelector('.filter-btn');
-const toggleFilterBtn = document.querySelectorAll('.toggle-filter-btn');
+import { routes } from './router.js';
 
 function determineResultType(result) {
   if (result.media_type) {
@@ -23,21 +18,40 @@ function determineResultType(result) {
     return 'tv';
   }
 
-  if (result.gender) {
+  if ('gender' in result) {
     return 'person';
   }
 }
 
-function renderSearchResults(query, results) {
+function setRandomBG() {
+  const hero = document.querySelector('.hero');
+  const backgrounds = [
+    './public/images/bg-0.webp',
+    './public/images/bg-1.webp',
+    './public/images/bg-2.webp',
+    './public/images/bg-3.webp',
+  ];
+
+  const randomImage =
+    backgrounds[Math.floor(Math.random() * backgrounds.length)];
+
+  hero.style.backgroundImage = `url('${randomImage}')`;
+}
+
+function updateSearchUI(resultsLength, query) {
   const h2 = document.querySelector('h2');
   const resultsHeading = document.querySelector('.results-heading');
+  const footer = document.querySelector('footer');
+  const searchResults = document.querySelector('.search-results');
+  const resultsList = document.querySelector('.results-list');
+  const searchTitle = document.querySelector('.search-title');
 
-  resultsSection.classList.remove('hidden');
+  searchResults.classList.remove('hidden');
   footer.style.position = 'static';
   footer.style.color = '#000';
-  searchResultsList.textContent = '';
+  resultsList.textContent = '';
 
-  if (results.length === 0) {
+  if (resultsLength === 0) {
     resultsHeading.classList.add('hidden');
     h2.textContent = 'No results found!';
     return;
@@ -48,7 +62,12 @@ function renderSearchResults(query, results) {
   }
 
   resultsHeading.classList.remove('hidden');
-  document.querySelector('.search-title').textContent = query;
+  searchTitle.textContent = query;
+}
+
+function renderSearchResults(query, results) {
+  updateSearchUI(results.length, query);
+  if (results.length === 0) return;
 
   results.forEach((result) => {
     const type = determineResultType(result);
@@ -68,42 +87,92 @@ function renderError(targetContainer, message) {
   targetContainer.insertAdjacentHTML('afterbegin', error(message));
 }
 
+function renderPage(path) {
+  const app = document.querySelector('#app');
+  const view = (routes[path] || routes[404])();
+  app.innerHTML = '';
+  app.insertAdjacentHTML('afterbegin', view);
+}
+
+async function navigate(path = '/', props = null) {
+  renderPage(path);
+
+  if (path === '/') {
+    setRandomBG();
+  }
+
+  if (path === '/search' && props) {
+    const { query, filters, pushState } = props;
+
+    // update the url
+    if (pushState) {
+      const newURL = new URL(`/search`, location.origin);
+      newURL.searchParams.set('query', query);
+      filters.forEach((filter) => newURL.searchParams.append('filter', filter));
+      history.pushState(null, '', newURL);
+    }
+
+    const { results } = await search(query, filters, 1);
+    renderSearchResults(query, results);
+  }
+
+  if (path === '/' || path === '/search') {
+    addFormEventListeners();
+  }
+}
+
+function addFormEventListeners() {
+  const searchForm = document.querySelector('.search-form');
+
+  searchForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const formData = new FormData(searchForm);
+    const query = formData.get('query');
+    const filters = formData.getAll('filter');
+
+    // render search page and search results
+    await navigate('/search', { query, filters, pushState: true });
+  });
+
+  document.querySelector('.filter-btn').addEventListener('click', () => {
+    const filtersDropdown = document.querySelector('.filters-dropdown');
+    filtersDropdown.classList.toggle('active');
+  });
+
+  document.querySelectorAll('.toggle-filter-btn').forEach((button) =>
+    button.addEventListener('click', (event) => {
+      const btn = event.currentTarget;
+      const checkbox = btn.querySelector('input');
+
+      btn.classList.toggle('active');
+      checkbox.toggleAttribute('checked');
+    }),
+  );
+}
+
 window.addEventListener('DOMContentLoaded', () => {
-  const hero = document.querySelector('.hero');
-  const backgrounds = [
-    './public/images/bg-0.webp',
-    './public/images/bg-1.webp',
-    './public/images/bg-2.webp',
-    './public/images/bg-3.webp',
-  ];
+  if (location.pathname === '/search') {
+    const params = new URLSearchParams(location.search);
 
-  const randomImage =
-    backgrounds[Math.floor(Math.random() * backgrounds.length)];
+    return navigate('/search', {
+      query: params.get('query'),
+      filters: params.getAll('filter'),
+    });
+  }
 
-  hero.style.backgroundImage = `url('${randomImage}')`;
+  navigate('/');
 });
 
-searchForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const formData = new FormData(searchForm);
-  const query = formData.get('query');
-  const filters = formData.getAll('filters');
-  const { results } = await search(query, filters, 1);
-  console.log(results);
-  renderSearchResults(query, results);
+window.addEventListener('popstate', () => {
+  const path = location.pathname;
+
+  if (path === '/search') {
+    const params = new URLSearchParams(location.search);
+    const query = params.get('query');
+    const filters = params.getAll('filter');
+
+    return navigate(path, { query, filters });
+  }
+
+  navigate(path);
 });
-
-filterBtn.addEventListener('click', (event) => {
-  const filtersDropdown = document.querySelector('.filters-dropdown');
-  filtersDropdown.classList.toggle('active');
-});
-
-toggleFilterBtn.forEach((button) =>
-  button.addEventListener('click', (event) => {
-    const btn = event.currentTarget;
-    const checkbox = btn.querySelector('input');
-
-    btn.classList.toggle('active');
-    checkbox.toggleAttribute('checked');
-  }),
-);

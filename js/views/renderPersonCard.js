@@ -1,7 +1,6 @@
 import resultCard from '../components/resultCard.js';
 import { formImageURL } from '../util.js';
 
-const searchResultsList = document.querySelector('.results-list');
 const jobs = {
   Acting: 'Actor',
   Directing: 'Director',
@@ -27,5 +26,7 @@ export default function renderPerson(person) {
     type: 'person',
   };
 
-  searchResultsList.insertAdjacentHTML('beforeend', resultCard(personDTO));
+  document
+    .querySelector('.results-list')
+    .insertAdjacentHTML('beforeend', resultCard(personDTO));
 }
