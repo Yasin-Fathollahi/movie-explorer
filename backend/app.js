@@ -1,14 +1,9 @@
-const http = require('http');
+const express = require('express');
+const path = require('path');
+const root = require('./utils/utils');
 
-const server = http.createServer((req, res) => {
-  // console.log('🚀 ~ app.js:4 ~ res:', res);
-  // console.log('🚀 ~ app.js:4 ~ req:', req);
+const app = express();
 
-  res.setHeader('type', 'text/html');
+app.use(express.static(path.join(root, 'public')));
 
-  res.write('<h1>This is sent from backend </h1>');
-
-  res.end();
-});
-
-server.listen(3000);
+app.listen(3000);

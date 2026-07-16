@@ -8,9 +8,13 @@ importers:
 
   .:
     dependencies:
+      body-parser:
+        specifier: ^2.3.0
+        version: 2.3.0
       express:
         specifier: ^5.2.1
         version: 5.2.1(supports-color@5.5.0)
+    devDependencies:
       nodemon:
         specifier: ^3.1.14
         version: 3.1.14
@@ -399,7 +403,7 @@ snapshots:
 
   binary-extensions@2.3.0: {}
 
-  body-parser@2.3.0(supports-color@5.5.0):
+  body-parser@2.3.0:
     dependencies:
       bytes: 3.1.2
       content-type: 2.0.0
@@ -488,7 +492,7 @@ snapshots:
   express@5.2.1(supports-color@5.5.0):
     dependencies:
       accepts: 2.0.0
-      body-parser: 2.3.0(supports-color@5.5.0)
+      body-parser: 2.3.0
       content-disposition: 1.1.0
       content-type: 1.0.5
       cookie: 0.7.2
