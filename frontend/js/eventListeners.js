@@ -89,7 +89,6 @@ searchForm.addEventListener('submit', async (event) => {
   const query = formData.get('query');
   const filters = formData.getAll('filters');
   const { results } = await search(query, filters, 1);
-  console.log(results);
   renderSearchResults(query, results);
 });
 

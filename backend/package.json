@@ -1,9 +1,12 @@
 {
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "dotenvx run -- nodemon app.js"
   },
+  "type": "module",
   "dependencies": {
+    "@dotenvx/dotenvx": "^2.11.1",
     "body-parser": "^2.3.0",
+    "cors": "^2.8.6",
     "express": "^5.2.1"
   },
   "devDependencies": {

@@ -1,5 +1,3 @@
-const path = require('path');
+import path from 'path';
 
-const root = path.dirname(require.main.name);
-
-module.exports = root;
+export const root = path.dirname(import.meta.filename);
