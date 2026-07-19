@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "dotenvx run -- nodemon app.js"
+    "dev": "dotenvx run -- nodemon app.js",
+    "start": "dotenvx run -- node app.js"
   },
   "type": "module",
   "dependencies": {
