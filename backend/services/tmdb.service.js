@@ -27,7 +27,7 @@ export async function search(
   filters = ['movie', 'tv', 'person'],
   page = 1,
 ) {
-  const route = filters.length > 1 ? 'search/multi' : `search/${filters[0]}`;
+  const route = Array.isArray(filters) ? 'search/multi' : `search/${filters}`;
   const url = new URL(route, BASE_URL);
   url.searchParams.set('query', query);
   url.searchParams.set('page', page);
@@ -44,13 +44,13 @@ export async function search(
 
   const data = await res.json();
   const reformattedData = {
-    page: page,
+    page,
     results: data.results,
     totalResults: data.total_results,
     totalPages: data.total_pages,
   };
 
-  if (route === 'search/multi' && filters.length < 3) {
+  if (route === 'search/multi' && filters.length === 2) {
     const filteredResults = filterResults(reformattedData.results, filters);
     const RESULTS_PER_PAGE = 20;
     return {
