@@ -1,4 +1,4 @@
-import { API_BASE_URL } from './config';
+import { API_BASE_URL } from './config.js';
 
 export async function search(query, filters, page = 1) {
   const url = new URL('api/search', API_BASE_URL);
