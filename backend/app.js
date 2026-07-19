@@ -7,7 +7,10 @@ import searchRoute from './routes/search.js';
 const app = express();
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:8080');
+  res.setHeader(
+    'Access-Control-Allow-Origin',
+    'http://127.0.0.1:8080, https://movie-explorer-1-vgwi.onrender.com',
+  );
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') {
