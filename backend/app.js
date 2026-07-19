@@ -6,21 +6,29 @@ import searchRoute from './routes/search.js';
 
 const app = express();
 
-app.use((req, res, next) => {
-  res.setHeader(
-    'Access-Control-Allow-Origin',
-    'http://127.0.0.1:8080, https://movie-explorer-1-vgwi.onrender.com',
-  );
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
-  }
+const allowedHeaders = [
+  'http://127.0.0.1:8080',
+  'http://localhost:8080',
+  'https://movie-explorer-1-vgwi.onrender.com',
+];
 
-  next();
-});
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin) {
+        return callback(null, true);
+      }
 
-// app.use(cors()); // use after learning manual cors handling
+      if (allowedHeaders.includes(origin)) {
+        return callback(null, true);
+      }
+
+      callback(new Error('Not allowed by CORS'));
+    },
+  }),
+);
+
+// The the simpler version would be app.use(cors({origin: allowedOrigins}))
 
 app.use(searchRoute);
 
