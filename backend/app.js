@@ -16,6 +16,7 @@ app.use(
   cors({
     origin(origin, callback) {
       if (!origin) {
+        // if the request isn't from a browser (e.g. postman, curl, health check) it won't have an origin => allow it
         return callback(null, true);
       }
 
